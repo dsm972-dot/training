@@ -1258,7 +1258,6 @@ function updateArbDisplay() {
 
 function bubbleTapped() {
   // Synchronise le timer modal existant avec le décompte en cours
-  clearInterval(autoRestInterval);
   startModalRest(autoRestSec, 'Prochain exercice');
   stopAutoRestTimer();
 }
