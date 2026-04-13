@@ -141,6 +141,8 @@
       display: flex; align-items: center; justify-content: center;
     }
     .set-btn.done { background: var(--green); border-color: var(--green); color: #fff; }
+    .set-btn { flex-direction: column; gap: 1px; line-height: 1.1; }
+    .set-kg-label { font-size: 9px; font-weight: 700; opacity: .9; }
     .rest-btn {
       margin-left: auto; background: rgba(232,80,10,.15); border: 1.5px solid rgba(232,80,10,.3);
       border-radius: 8px; padding: 6px 12px; color: var(--orange); font-size: 12px; font-weight: 700; cursor: pointer;
@@ -188,6 +190,45 @@
     .prog-tech-item { background: var(--card); border-radius: 8px; padding: 8px 10px; display: flex; gap: 8px; align-items: flex-start; }
     .prog-tech-name { font-size: 12px; font-weight: 800; color: var(--text); min-width: 90px; flex-shrink: 0; }
     .prog-tech-desc { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+    /* ─── SET MODAL (slide-up) ─── */
+    #set-modal {
+      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%) translateY(100%);
+      width: 100%; max-width: 430px; background: #1E1E1E;
+      border-radius: 20px 20px 0 0; padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
+      z-index: 300; transition: transform .3s cubic-bezier(.25,.8,.25,1);
+      box-shadow: 0 -8px 40px rgba(0,0,0,.6);
+    }
+    #set-modal.show { transform: translateX(-50%) translateY(0); }
+    .sm-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,.5);
+      z-index: 299; display: none;
+    }
+    .sm-backdrop.show { display: block; }
+    .sm-handle { width: 40px; height: 4px; background: #333; border-radius: 2px; margin: 0 auto 16px; }
+    .sm-header { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+    .sm-prev { font-size: 12px; color: #555; margin-bottom: 14px; min-height: 16px; }
+    .sm-inputs { display: flex; gap: 10px; align-items: center; margin-bottom: 14px; }
+    .sm-field { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .sm-label { font-size: 10px; color: var(--muted); font-weight: 700; text-transform: uppercase; }
+    .sm-input {
+      width: 90px; background: #252525; border: 1.5px solid #444;
+      border-radius: 10px; color: var(--text); font-size: 22px; font-weight: 800;
+      text-align: center; padding: 10px 0; -moz-appearance: textfield;
+    }
+    .sm-input:focus { outline: none; border-color: var(--orange); }
+    .sm-input::-webkit-outer-spin-button, .sm-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .sm-sep { font-size: 20px; color: #444; font-weight: 700; margin-top: 14px; }
+    .sm-confirm-btn {
+      width: 100%; background: var(--orange); color: #fff; border: none;
+      border-radius: 12px; padding: 14px; font-size: 16px; font-weight: 800; cursor: pointer;
+    }
+    .sm-confirm-btn:active { opacity: .85; }
+    .sm-pr-flash {
+      display: none; text-align: center; color: var(--green);
+      font-size: 15px; font-weight: 800; padding: 8px 0; animation: prPop .4s ease;
+    }
+    @keyframes prPop { from { transform: scale(.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
     /* ─── TIMER PAGE ─── */
     .timer-container { display: flex; flex-direction: column; align-items: center; padding: 20px 16px; }
@@ -535,6 +576,27 @@
       <span>Progrès</span>
     </button>
   </nav>
+</div>
+
+<!-- ═══════════════ SET MODAL ═══════════════ -->
+<div class="sm-backdrop" id="sm-backdrop" onclick="closeSetModalCancel()"></div>
+<div id="set-modal">
+  <div class="sm-handle"></div>
+  <div class="sm-pr-flash" id="sm-pr-flash">🏆 Nouveau record !</div>
+  <div class="sm-header" id="sm-header">Série 1</div>
+  <div class="sm-prev" id="sm-prev"></div>
+  <div class="sm-inputs">
+    <div class="sm-field">
+      <span class="sm-label">Poids (kg)</span>
+      <input class="sm-input" id="sm-kg" type="number" step="0.5" min="0" inputmode="decimal">
+    </div>
+    <span class="sm-sep">×</span>
+    <div class="sm-field">
+      <span class="sm-label">Reps</span>
+      <input class="sm-input" id="sm-reps" type="number" step="1" min="1" inputmode="numeric">
+    </div>
+  </div>
+  <button class="sm-confirm-btn" id="sm-confirm-btn" onclick="confirmSet()">✓ Valider la série</button>
 </div>
 
 <!-- ═══════════════ REST MODAL ═══════════════ -->
@@ -951,7 +1013,11 @@ function makeExCard(workoutId, ex, exIdx, color) {
   for (let s = 0; s < ex.sets; s++) {
     const key = `${workoutId}_${exIdx}_${s}`;
     const done = !!setsDone[workoutId]?.[key];
-    setsHtml += `<button class="set-btn${done?' done':''}" onclick="toggleSet('${workoutId}',${exIdx},${s},this)">${s+1}</button>`;
+    const logged = setLog[key];
+    const btnContent = logged
+      ? `<span>${s+1}</span><span class="set-kg-label">${logged.kg}kg</span>`
+      : `${s+1}`;
+    setsHtml += `<button class="set-btn${done?' done':''}" id="set-btn-${workoutId}-${exIdx}-${s}" onclick="openSetModal('${workoutId}',${exIdx},${s})">${btnContent}</button>`;
   }
 
   const restLabel = ex.rest > 0 ? fmtSec(ex.rest) + ' repos' : 'Pas de repos';
@@ -1023,6 +1089,109 @@ function checkExercise(workoutId, exIdx) {
   check.classList.toggle('checked', !alreadyChecked);
   document.getElementById(`ex-${workoutId}-${exIdx}`)?.classList.toggle('done-card', !alreadyChecked);
   updateProgressBar(workoutId);
+}
+
+function openSetModal(workoutId, exIdx, setIdx) {
+  const w = PROGRAM[workoutId];
+  const ex = w.exercises[exIdx];
+  _smCtx = { workoutId, exIdx, setIdx };
+
+  // En-tête
+  document.getElementById('sm-header').textContent = `Série ${setIdx + 1} / ${ex.sets} · ${ex.name}`;
+
+  // Rappel série précédente
+  const prevKey = `${workoutId}_${exIdx}_${setIdx - 1}`;
+  const prev = setLog[prevKey];
+  document.getElementById('sm-prev').textContent = prev
+    ? `Série ${setIdx} : ${prev.kg} kg × ${prev.reps} reps`
+    : (setIdx === 0 ? 'Première série' : '');
+
+  // Pré-remplir kg avec dernière valeur connue pour cet exercice
+  const allKeys = Object.keys(setLog).filter(k => k.startsWith(`${workoutId}_${exIdx}_`));
+  const lastKg = allKeys.length
+    ? setLog[allKeys[allKeys.length - 1]].kg
+    : (getRefKgForEx(ex.name) || '');
+  document.getElementById('sm-kg').value = lastKg;
+
+  // Pré-remplir reps avec cible programme (premier chiffre de "4-5" ou valeur directe)
+  const targetReps = parseInt(ex.reps) || parseInt(ex.reps.split('-')[0]) || '';
+  document.getElementById('sm-reps').value = targetReps;
+
+  document.getElementById('sm-pr-flash').style.display = 'none';
+  document.getElementById('sm-backdrop').classList.add('show');
+  document.getElementById('set-modal').classList.add('show');
+
+  // Focus automatique sur le champ kg
+  setTimeout(() => document.getElementById('sm-kg').focus(), 350);
+}
+
+function closeSetModalCancel() {
+  document.getElementById('sm-backdrop').classList.remove('show');
+  document.getElementById('set-modal').classList.remove('show');
+  _smCtx = null;
+}
+
+function confirmSet() {
+  if (!_smCtx) return;
+  const { workoutId, exIdx, setIdx } = _smCtx;
+  const kg = parseFloat(document.getElementById('sm-kg').value) || 0;
+  const reps = parseInt(document.getElementById('sm-reps').value) || 0;
+  if (kg <= 0 || reps <= 0) { alert('Saisis le poids et les reps.'); return; }
+
+  const w = PROGRAM[workoutId];
+  const ex = w.exercises[exIdx];
+  const key = `${workoutId}_${exIdx}_${setIdx}`;
+
+  // Enregistrer dans setLog
+  setLog[key] = { kg, reps };
+  localStorage.setItem('setLog', JSON.stringify(setLog));
+
+  // Mettre à jour le meilleur de la session
+  if (!sessionMaxByEx[ex.name] || kg * reps > sessionMaxByEx[ex.name].kg * sessionMaxByEx[ex.name].reps) {
+    sessionMaxByEx[ex.name] = { kg, reps };
+  }
+
+  // Détection PR
+  const isPR = detectPR(ex.name, kg, reps);
+  if (isPR) {
+    sessionPRs.push(`${ex.name}: ${kg}kg×${reps}`);
+    const flash = document.getElementById('sm-pr-flash');
+    flash.style.display = 'block';
+  }
+
+  // Mettre à jour le bouton de série
+  const btn = document.getElementById(`set-btn-${workoutId}-${exIdx}-${setIdx}`);
+  if (btn) {
+    btn.classList.add('done');
+    btn.innerHTML = `<span>${setIdx + 1}</span><span class="set-kg-label">${kg}kg</span>`;
+  }
+
+  // Marquer dans setsDone pour la barre de progression
+  if (!setsDone[workoutId]) setsDone[workoutId] = {};
+  setsDone[workoutId][key] = true;
+  updateProgressBar(workoutId);
+
+  // Auto-check exercice si toutes les séries sont faites
+  let allDone = true;
+  for (let s = 0; s < ex.sets; s++) {
+    if (!setsDone[workoutId][`${workoutId}_${exIdx}_${s}`]) { allDone = false; break; }
+  }
+  const check = document.getElementById(`check-${workoutId}-${exIdx}`);
+  if (check) {
+    check.classList.toggle('checked', allDone);
+    document.getElementById(`ex-${workoutId}-${exIdx}`)?.classList.toggle('done-card', allDone);
+  }
+
+  // Démarrer auto-timer repos
+  if (typeof startAutoRestTimer === 'function' && ex.rest > 0) startAutoRestTimer(ex.rest);
+
+  // Fermer modal (avec délai si PR pour laisser voir le flash)
+  const delay = isPR ? 1500 : 400;
+  setTimeout(() => {
+    document.getElementById('sm-backdrop').classList.remove('show');
+    document.getElementById('set-modal').classList.remove('show');
+    _smCtx = null;
+  }, delay);
 }
 
 function updateProgressBar(workoutId) {
