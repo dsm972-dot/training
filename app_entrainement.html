@@ -675,9 +675,10 @@ let sessionMaxByEx = {};       // { exName: { kg, reps } } — meilleure série 
 let autoRestInterval = null;   // interval pastille flottante
 let autoRestSec = 0;
 let autoRestTotal = 0;
-let _smCtx = null; // { workoutId, exIdx, setIdx } — contexte du modal ouvert
-let _currentRating = 0;
-let _summaryWorkoutId = null;
+let _smCtx = null; // { workoutId, exIdx, setIdx } — contexte du modal ouvert (Task 2)
+let _currentRating = 0;          // note étoiles de la séance en cours (Task 5)
+let _summaryWorkoutId = null;     // workoutId affiché sur l'écran résumé (Task 5)
+// NOTE: ces 3 variables sont pré-déclarées ici — ne pas les redéclarer dans Tasks 2/5
 
 // ══════════════════════════════════════════════
 // NAVIGATION
