@@ -230,6 +230,26 @@
     }
     @keyframes prPop { from { transform: scale(.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
+    /* ─── AUTO REST BUBBLE ─── */
+    #auto-rest-bubble {
+      position: fixed; bottom: calc(var(--nav-h) + 12px); right: 12px;
+      width: 62px; height: 62px; border-radius: 50%;
+      background: #1E1E1E; border: 2px solid var(--orange);
+      display: none; align-items: center; justify-content: center; flex-direction: column;
+      z-index: 200; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,.5);
+      transition: transform .2s;
+    }
+    #auto-rest-bubble.visible { display: flex; }
+    #auto-rest-bubble:active { transform: scale(.93); }
+    .arb-time { font-size: 13px; font-weight: 800; color: var(--text); line-height: 1; }
+    .arb-label { font-size: 9px; color: var(--muted); margin-top: 2px; }
+    .arb-ring {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      transform: rotate(-90deg);
+    }
+    .arb-ring-track { fill: none; stroke: #333; stroke-width: 3; }
+    .arb-ring-prog { fill: none; stroke: var(--orange); stroke-width: 3; stroke-linecap: round; transition: stroke-dashoffset .9s linear; }
+
     /* ─── TIMER PAGE ─── */
     .timer-container { display: flex; flex-direction: column; align-items: center; padding: 20px 16px; }
     .timer-type-toggle { display: flex; gap: 8px; width: 100%; margin-bottom: 24px; }
@@ -576,6 +596,17 @@
       <span>Progrès</span>
     </button>
   </nav>
+</div>
+
+<!-- ═══════════════ AUTO REST BUBBLE ═══════════════ -->
+<div id="auto-rest-bubble" onclick="bubbleTapped()">
+  <svg class="arb-ring" viewBox="0 0 62 62">
+    <circle class="arb-ring-track" cx="31" cy="31" r="27"/>
+    <circle class="arb-ring-prog" id="arb-prog" cx="31" cy="31" r="27"
+      stroke-dasharray="169.6" stroke-dashoffset="0"/>
+  </svg>
+  <span class="arb-time" id="arb-time">1:30</span>
+  <span class="arb-label">REPOS</span>
 </div>
 
 <!-- ═══════════════ SET MODAL ═══════════════ -->
@@ -1183,7 +1214,7 @@ function confirmSet() {
   }
 
   // Démarrer auto-timer repos
-  if (typeof startAutoRestTimer === 'function' && ex.rest > 0) startAutoRestTimer(ex.rest);
+  if (ex.rest > 0) startAutoRestTimer(ex.rest);
 
   // Fermer modal (avec délai si PR pour laisser voir le flash)
   const delay = isPR ? 1500 : 400;
@@ -1192,6 +1223,44 @@ function confirmSet() {
     document.getElementById('set-modal').classList.remove('show');
     _smCtx = null;
   }, delay);
+}
+
+function startAutoRestTimer(sec) {
+  clearInterval(autoRestInterval);
+  autoRestSec = sec;
+  autoRestTotal = sec;
+  const bubble = document.getElementById('auto-rest-bubble');
+  bubble.classList.add('visible');
+  updateArbDisplay();
+  autoRestInterval = setInterval(() => {
+    autoRestSec--;
+    if (autoRestSec <= 0) {
+      beep();
+      stopAutoRestTimer();
+      return;
+    }
+    updateArbDisplay();
+  }, 1000);
+}
+
+function stopAutoRestTimer() {
+  clearInterval(autoRestInterval);
+  autoRestSec = 0;
+  document.getElementById('auto-rest-bubble').classList.remove('visible');
+}
+
+function updateArbDisplay() {
+  document.getElementById('arb-time').textContent = fmtSec(autoRestSec);
+  const pct = autoRestTotal > 0 ? autoRestSec / autoRestTotal : 0;
+  const circ = 169.6;
+  document.getElementById('arb-prog').style.strokeDashoffset = circ * (1 - pct);
+}
+
+function bubbleTapped() {
+  // Synchronise le timer modal existant avec le décompte en cours
+  clearInterval(autoRestInterval);
+  startModalRest(autoRestSec, 'Prochain exercice');
+  stopAutoRestTimer();
 }
 
 function updateProgressBar(workoutId) {
