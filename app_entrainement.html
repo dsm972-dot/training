@@ -250,6 +250,34 @@
     .arb-ring-track { fill: none; stroke: #333; stroke-width: 3; }
     .arb-ring-prog { fill: none; stroke: var(--orange); stroke-width: 3; stroke-linecap: round; transition: stroke-dashoffset .9s linear; }
 
+/* ─── WEEK BANNER ─── */
+.week-banner { background: var(--card); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.wb-left { display: flex; flex-direction: column; gap: 2px; }
+.wb-label { font-size: 10px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .4px; }
+.wb-title { font-size: 15px; font-weight: 800; color: var(--orange); }
+.wb-sub { font-size: 11px; color: var(--muted); }
+.week-pills { display: flex; gap: 5px; }
+.week-pill { padding: 5px 9px; border-radius: 8px; border: 1.5px solid #2a2a2a; background: var(--card2); color: var(--muted); font-size: 11px; font-weight: 800; cursor: pointer; transition: all .15s; }
+.week-pill.active { border-color: var(--orange); color: var(--orange); background: rgba(232,80,10,.1); }
+
+/* Badge cible semaine sur carte exercice */
+.week-target-badge { font-size: 10px; color: var(--orange); font-weight: 700; background: rgba(232,80,10,.1); border-radius: 4px; padding: 1px 5px; margin-left: 6px; }
+
+/* ─── PAGE PARAMÈTRES ─── */
+#page-settings { background: var(--bg); }
+.settings-header { display: flex; align-items: center; gap: 12px; padding: 16px; border-bottom: 1px solid #2a2a2a; }
+.settings-back { background: none; border: none; color: var(--text); font-size: 20px; cursor: pointer; padding: 4px; }
+.settings-title { font-size: 18px; font-weight: 800; }
+.settings-group { margin: 20px 16px 0; }
+.settings-group-label { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+.settings-row { background: var(--card); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 8px; }
+.settings-row-label { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.settings-date-input { width: 100%; background: #252525; border: 1.5px solid #444; border-radius: 10px; color: var(--text); font-size: 15px; padding: 10px 12px; box-sizing: border-box; }
+.settings-date-input:focus { outline: none; border-color: var(--orange); }
+.settings-save-btn { width: 100%; background: var(--orange); color: #fff; border: none; border-radius: 10px; padding: 12px; font-size: 14px; font-weight: 800; margin-top: 10px; cursor: pointer; }
+.settings-reset-btn { width: 100%; background: transparent; color: var(--muted); border: 1.5px solid #333; border-radius: 10px; padding: 10px; font-size: 13px; font-weight: 700; margin-top: 6px; cursor: pointer; }
+.settings-gear { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; padding: 4px; }
+
     /* ─── TIMER PAGE ─── */
     .timer-container { display: flex; flex-direction: column; align-items: center; padding: 20px 16px; }
     .timer-type-toggle { display: flex; gap: 8px; width: 100%; margin-bottom: 24px; }
@@ -387,11 +415,16 @@
     <div class="scroll">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
         <div>
-          <div class="page-title" id="home-greeting">Bonjour Denis 👊</div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div class="page-title" id="home-greeting">Bonjour Denis 👊</div>
+            <button class="settings-gear" onclick="showPage('settings')">⚙️</button>
+          </div>
           <div class="page-subtitle" id="home-date">Chargement...</div>
         </div>
         <div style="font-size:28px">🔥</div>
       </div>
+
+      <div class="week-banner" id="week-banner"></div>
 
       <!-- Today Banner -->
       <div id="today-banner" class="today-banner" onclick="openTodayWorkout()">
@@ -574,6 +607,31 @@
       <div id="weight-log-list"></div>
 
       <div style="height:8px"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ PAGE PARAMÈTRES ═══════════════ -->
+  <div id="page-settings" class="page">
+    <div class="settings-header">
+      <button class="settings-back" onclick="showPage('home')">←</button>
+      <span class="settings-title">⚙️ Paramètres</span>
+    </div>
+    <div class="settings-group">
+      <div class="settings-group-label">Programme</div>
+      <div class="settings-row">
+        <div class="settings-row-label">Date de début du programme</div>
+        <input class="settings-date-input" id="settings-program-start" type="date"
+          placeholder="AAAA-MM-JJ">
+        <button class="settings-save-btn" onclick="saveSettingsProgramStart()">Enregistrer</button>
+        <button class="settings-reset-btn" onclick="resetProgram()">Réinitialiser le programme</button>
+      </div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-group-label">Données</div>
+      <div class="settings-row">
+        <div class="settings-row-label">Effacer les données de poids</div>
+        <button class="settings-reset-btn" onclick="if(confirm('Effacer tous les logs de poids ?')){setLog={};sessionLog={};localStorage.removeItem('setLog');localStorage.removeItem('sessionLog');alert('Effacé.');}">Effacer setLog + sessionLog</button>
+      </div>
     </div>
   </div>
 
@@ -785,6 +843,7 @@ function showPage(name) {
   currentPage = name;
   if (name === 'home') renderHome();
   if (name === 'progress') renderProgress();
+  if (name === 'settings') renderSettingsPage();
 }
 
 function showWorkoutPicker() {
@@ -830,6 +889,22 @@ function renderHome() {
   const h = now.getHours();
   const greet = h < 12 ? 'Bonjour' : h < 18 ? 'Bon après-midi' : 'Bonsoir';
   document.getElementById('home-greeting').textContent = greet + ' Denis 👊';
+
+  // Week banner
+  const week = getCurrentWeek();
+  const weekBanner = document.getElementById('week-banner');
+  if (weekBanner) {
+    weekBanner.innerHTML = `
+      <div class="wb-left">
+        <span class="wb-label">Programme en cours</span>
+        <span class="wb-title">Semaine ${week} ${programStart ? '✓' : ''}</span>
+        <span class="wb-sub">${getWeekLabel(week)}</span>
+      </div>
+      <div class="week-pills">
+        ${[1,2,3,4].map(w => `<button class="week-pill${week===w?' active':''}" onclick="setWeekOverride(${w})">S${w}</button>`).join('')}
+      </div>
+    `;
+  }
 
   // Today banner
   const w = PROGRAM[dayName];
@@ -1037,6 +1112,10 @@ function makeExCard(workoutId, ex, exIdx, color) {
   }
 
   const noteHtml = ex.note ? `<div class="badge orange">★ ${ex.note}</div>` : '';
+  const week = getCurrentWeek();
+  const refKg = getRefKgForEx(ex.name);
+  const targetKg = refKg ? Math.round(refKg * getWeekCoeff(week) * 2) / 2 : null;
+  const weekBadge = (week > 1 && targetKg) ? `<span class="week-target-badge">Cible S${week} : ~${targetKg} kg</span>` : '';
   const lieuColor = ex.lieu && ex.lieu.includes('Maison') ? '#3A8EE8' : '#E8500A';
 
   // Sets buttons
@@ -1063,7 +1142,7 @@ function makeExCard(workoutId, ex, exIdx, color) {
     <div class="ex-header">
       <div class="ex-num${isSuperset?' ss':''}" style="${!isSuperset?'background:'+color:''}">${ex.num}</div>
       <div class="ex-info">
-        <div class="ex-name">${ex.name}</div>
+        <div class="ex-name">${ex.name}${weekBadge}</div>
         <div class="ex-params">
           <span class="badge">${ex.sets} séries</span>
           <span class="badge orange">${ex.reps} reps</span>
@@ -1642,6 +1721,29 @@ function saveProgramStart(dateStr) {
   localStorage.setItem('programStart', dateStr);
   currentWeek = null;
   localStorage.removeItem('currentWeek');
+}
+
+function renderSettingsPage() {
+  const inp = document.getElementById('settings-program-start');
+  if (inp && programStart) inp.value = programStart;
+}
+
+function saveSettingsProgramStart() {
+  const val = document.getElementById('settings-program-start').value;
+  if (!val) return;
+  saveProgramStart(val);
+  alert('Date de départ enregistrée. Semaine recalculée automatiquement.');
+  showPage('home');
+}
+
+function resetProgram() {
+  if (!confirm('Réinitialiser la date de départ et la semaine ?')) return;
+  programStart = null;
+  currentWeek = null;
+  localStorage.removeItem('programStart');
+  localStorage.removeItem('currentWeek');
+  alert('Programme réinitialisé.');
+  showPage('home');
 }
 
 // ══════════════════════════════════════════════
