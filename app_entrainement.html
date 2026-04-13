@@ -230,6 +230,117 @@
     }
     @keyframes prPop { from { transform: scale(.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
+    /* ─── AUTO REST BUBBLE ─── */
+    #auto-rest-bubble {
+      position: fixed; bottom: calc(var(--nav-h) + 12px); right: 12px;
+      width: 62px; height: 62px; border-radius: 50%;
+      background: #1E1E1E; border: 2px solid var(--orange);
+      display: none; align-items: center; justify-content: center; flex-direction: column;
+      z-index: 200; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,.5);
+      transition: transform .2s;
+    }
+    #auto-rest-bubble.visible { display: flex; }
+    #auto-rest-bubble:active { transform: scale(.93); }
+    .arb-time { font-size: 13px; font-weight: 800; color: var(--text); line-height: 1; }
+    .arb-label { font-size: 9px; color: var(--muted); margin-top: 2px; }
+    .arb-ring {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      transform: rotate(-90deg);
+    }
+    .arb-ring-track { fill: none; stroke: #333; stroke-width: 3; }
+    .arb-ring-prog { fill: none; stroke: var(--orange); stroke-width: 3; stroke-linecap: round; transition: stroke-dashoffset .9s linear; }
+
+/* ─── WEEK BANNER ─── */
+.week-banner { background: var(--card); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.wb-left { display: flex; flex-direction: column; gap: 2px; }
+.wb-label { font-size: 10px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .4px; }
+.wb-title { font-size: 15px; font-weight: 800; color: var(--orange); }
+.wb-sub { font-size: 11px; color: var(--muted); }
+.week-pills { display: flex; gap: 5px; }
+.week-pill { padding: 5px 9px; border-radius: 8px; border: 1.5px solid #2a2a2a; background: var(--card2); color: var(--muted); font-size: 11px; font-weight: 800; cursor: pointer; transition: all .15s; }
+.week-pill.active { border-color: var(--orange); color: var(--orange); background: rgba(232,80,10,.1); }
+
+/* Badge cible semaine sur carte exercice */
+.week-target-badge { font-size: 10px; color: var(--orange); font-weight: 700; background: rgba(232,80,10,.1); border-radius: 4px; padding: 1px 5px; margin-left: 6px; }
+
+/* ─── PAGE PARAMÈTRES ─── */
+#page-settings { background: var(--bg); }
+.settings-header { display: flex; align-items: center; gap: 12px; padding: 16px; border-bottom: 1px solid #2a2a2a; }
+.settings-back { background: none; border: none; color: var(--text); font-size: 20px; cursor: pointer; padding: 4px; }
+.settings-title { font-size: 18px; font-weight: 800; }
+.settings-group { margin: 20px 16px 0; }
+.settings-group-label { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+.settings-row { background: var(--card); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 8px; }
+.settings-row-label { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.settings-date-input { width: 100%; background: #252525; border: 1.5px solid #444; border-radius: 10px; color: var(--text); font-size: 15px; padding: 10px 12px; box-sizing: border-box; }
+.settings-date-input:focus { outline: none; border-color: var(--orange); }
+.settings-save-btn { width: 100%; background: var(--orange); color: #fff; border: none; border-radius: 10px; padding: 12px; font-size: 14px; font-weight: 800; margin-top: 10px; cursor: pointer; }
+.settings-reset-btn { width: 100%; background: transparent; color: var(--muted); border: 1.5px solid #333; border-radius: 10px; padding: 10px; font-size: 13px; font-weight: 700; margin-top: 6px; cursor: pointer; }
+.settings-gear { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; padding: 4px; }
+
+/* ─── SESSION SUMMARY ─── */
+#page-summary { justify-content: flex-start; }
+.summary-confetti { height: 5px; background: linear-gradient(90deg,#E8500A,#9B3AE8,#2DBD6E,#E8500A); background-size: 200%; animation: confetti 2s linear infinite; }
+@keyframes confetti { to { background-position: 200%; } }
+.summary-hero { text-align: center; padding: 28px 16px 20px; }
+.summary-emoji { font-size: 48px; display: block; margin-bottom: 8px; }
+.summary-name { font-size: 22px; font-weight: 800; }
+.summary-meta { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.summary-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 16px; margin-bottom: 16px; }
+.summary-stat { background: var(--card); border-radius: var(--radius); padding: 16px; text-align: center; }
+.summary-stat-val { font-size: 24px; font-weight: 800; color: var(--orange); }
+.summary-stat-label { font-size: 11px; color: var(--muted); margin-top: 3px; }
+.summary-prs { margin: 0 16px 16px; background: rgba(45,189,110,.08); border: 1px solid rgba(45,189,110,.25); border-radius: var(--radius); padding: 12px 14px; }
+.summary-prs-title { font-size: 11px; font-weight: 800; color: var(--green); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 8px; }
+.summary-pr-item { font-size: 13px; color: var(--text); padding: 3px 0; }
+.summary-rating { padding: 0 16px 12px; }
+.summary-rating-label { font-size: 13px; font-weight: 700; text-align: center; margin-bottom: 10px; }
+.stars-row { display: flex; gap: 8px; justify-content: center; margin-bottom: 12px; }
+.star-btn { font-size: 30px; cursor: pointer; opacity: .3; transition: opacity .15s, transform .15s; background: none; border: none; padding: 0; }
+.star-btn.active { opacity: 1; transform: scale(1.15); }
+.summary-note { width: 100%; background: var(--card); border: 1.5px solid #333; border-radius: 10px; color: var(--text); font-size: 14px; font-family: inherit; padding: 12px 14px; box-sizing: border-box; resize: none; }
+.summary-note:focus { outline: none; border-color: var(--orange); }
+.summary-save-btn { display: block; width: calc(100% - 32px); margin: 14px 16px; background: var(--green); color: #fff; border: none; border-radius: var(--radius); padding: 16px; font-size: 16px; font-weight: 800; cursor: pointer; }
+
+/* ─── PROGRESS SUB-TABS ─── */
+.progress-tabs { display: flex; gap: 6px; margin-bottom: 16px; }
+.ptab { flex: 1; padding: 8px 4px; border-radius: 10px; border: 1.5px solid #2a2a2a; background: var(--card); color: var(--muted); font-size: 12px; font-weight: 700; cursor: pointer; text-align: center; transition: all .15s; }
+.ptab.active { border-color: var(--orange); color: var(--orange); background: rgba(232,80,10,.1); }
+.session-card-enriched { background: var(--card); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 8px; cursor: pointer; }
+.sce-row1 { display: flex; align-items: center; gap: 10px; }
+.sce-icon { font-size: 20px; }
+.sce-info { flex: 1; }
+.sce-name { font-size: 14px; font-weight: 700; }
+.sce-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.sce-badges { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+.sce-badge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 5px; }
+.sce-badge-vol { background: rgba(232,80,10,.15); color: var(--orange); }
+.sce-badge-pr { background: rgba(45,189,110,.15); color: var(--green); }
+.sce-badge-stars { background: rgba(255,193,7,.12); color: #FFC107; }
+.sce-note { font-size: 12px; color: var(--muted); margin-top: 8px; padding-top: 8px; border-top: 1px solid #2a2a2a; display: none; font-style: italic; }
+.session-card-enriched.open .sce-note { display: block; }
+
+/* ─── CHART ─── */
+.chart-card { background: var(--card); border-radius: var(--radius); padding: 14px; margin-bottom: 12px; }
+.chart-card-title { font-size: 13px; font-weight: 800; color: var(--orange); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.chart-empty { font-size: 12px; color: var(--muted); text-align: center; padding: 20px 0; }
+
+/* ─── BODY TAB ─── */
+.body-form { background: var(--card); border-radius: var(--radius); padding: 14px; margin-bottom: 14px; }
+.body-form-title { font-size: 13px; font-weight: 800; margin-bottom: 12px; }
+.body-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+.body-field { display: flex; flex-direction: column; gap: 4px; }
+.body-field label { font-size: 10px; color: var(--muted); font-weight: 700; text-transform: uppercase; }
+.body-field input { background: #252525; border: 1.5px solid #333; border-radius: 8px; color: var(--text); font-size: 15px; padding: 8px 10px; text-align: center; }
+.body-field input:focus { outline: none; border-color: var(--orange); }
+.body-save-btn { width: 100%; background: var(--orange); color: #fff; border: none; border-radius: 10px; padding: 11px; font-size: 14px; font-weight: 800; cursor: pointer; }
+.body-history { background: var(--card); border-radius: var(--radius); overflow: hidden; }
+.body-history-row { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid #2a2a2a; font-size: 13px; }
+.body-history-row:last-child { border-bottom: none; }
+.body-hist-date { color: var(--muted); font-size: 11px; min-width: 60px; }
+.body-hist-val { font-weight: 800; color: var(--orange); }
+.body-hist-extra { color: var(--muted); font-size: 11px; }
+
     /* ─── TIMER PAGE ─── */
     .timer-container { display: flex; flex-direction: column; align-items: center; padding: 20px 16px; }
     .timer-type-toggle { display: flex; gap: 8px; width: 100%; margin-bottom: 24px; }
@@ -367,11 +478,16 @@
     <div class="scroll">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
         <div>
-          <div class="page-title" id="home-greeting">Bonjour Denis 👊</div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div class="page-title" id="home-greeting">Bonjour Denis 👊</div>
+            <button class="settings-gear" onclick="showPage('settings')">⚙️</button>
+          </div>
           <div class="page-subtitle" id="home-date">Chargement...</div>
         </div>
         <div style="font-size:28px">🔥</div>
       </div>
+
+      <div class="week-banner" id="week-banner"></div>
 
       <!-- Today Banner -->
       <div id="today-banner" class="today-banner" onclick="openTodayWorkout()">
@@ -547,13 +663,77 @@
       <h3>Plan de progression — 4 semaines</h3>
       <div id="prog-plan-section"></div>
 
-      <h3>Séances complétées</h3>
-      <div id="completed-sessions-list"></div>
-
-      <h3>Charges enregistrées</h3>
-      <div id="weight-log-list"></div>
+      <div class="progress-tabs">
+        <button class="ptab active" id="ptab-sessions" onclick="switchProgressTab('sessions')">📅 Séances</button>
+        <button class="ptab" id="ptab-curves" onclick="switchProgressTab('curves')">📈 Courbes</button>
+        <button class="ptab" id="ptab-body" onclick="switchProgressTab('body')">⚖️ Corps</button>
+      </div>
+      <div id="ptab-content-sessions"></div>
+      <div id="ptab-content-curves" style="display:none"></div>
+      <div id="ptab-content-body" style="display:none"></div>
 
       <div style="height:8px"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ PAGE RÉSUMÉ SÉANCE ═══════════════ -->
+  <div id="page-summary" class="page">
+    <div class="summary-confetti"></div>
+    <div class="summary-hero">
+      <span class="summary-emoji" id="summary-emoji">💪</span>
+      <div class="summary-name" id="summary-name">Séance terminée !</div>
+      <div class="summary-meta" id="summary-meta"></div>
+    </div>
+    <div class="summary-stats">
+      <div class="summary-stat">
+        <div class="summary-stat-val" id="summary-volume">0</div>
+        <div class="summary-stat-label">kg soulevés</div>
+      </div>
+      <div class="summary-stat">
+        <div class="summary-stat-val" id="summary-sets">0/0</div>
+        <div class="summary-stat-label">séries ✓</div>
+      </div>
+    </div>
+    <div class="summary-prs" id="summary-prs-block" style="display:none">
+      <div class="summary-prs-title">🏆 Records du jour</div>
+      <div id="summary-prs-list"></div>
+    </div>
+    <div class="summary-rating">
+      <div class="summary-rating-label">Comment tu te sens ?</div>
+      <div class="stars-row" id="stars-row">
+        <button class="star-btn" data-val="1" onclick="setRating(1)">⭐</button>
+        <button class="star-btn" data-val="2" onclick="setRating(2)">⭐</button>
+        <button class="star-btn" data-val="3" onclick="setRating(3)">⭐</button>
+        <button class="star-btn" data-val="4" onclick="setRating(4)">⭐</button>
+        <button class="star-btn" data-val="5" onclick="setRating(5)">⭐</button>
+      </div>
+      <textarea class="summary-note" id="summary-note" rows="2" placeholder="Note rapide… (optionnel)"></textarea>
+    </div>
+    <button class="summary-save-btn" onclick="saveSessionSummary()">✅ Enregistrer la séance</button>
+  </div>
+
+  <!-- ═══════════════ PAGE PARAMÈTRES ═══════════════ -->
+  <div id="page-settings" class="page">
+    <div class="settings-header">
+      <button class="settings-back" onclick="showPage('home')">←</button>
+      <span class="settings-title">⚙️ Paramètres</span>
+    </div>
+    <div class="settings-group">
+      <div class="settings-group-label">Programme</div>
+      <div class="settings-row">
+        <div class="settings-row-label">Date de début du programme</div>
+        <input class="settings-date-input" id="settings-program-start" type="date"
+          placeholder="AAAA-MM-JJ">
+        <button class="settings-save-btn" onclick="saveSettingsProgramStart()">Enregistrer</button>
+        <button class="settings-reset-btn" onclick="resetProgram()">Réinitialiser le programme</button>
+      </div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-group-label">Données</div>
+      <div class="settings-row">
+        <div class="settings-row-label">Effacer les données de poids</div>
+        <button class="settings-reset-btn" onclick="if(confirm('Effacer tous les logs de poids ?')){setLog={};sessionLog={};localStorage.removeItem('setLog');localStorage.removeItem('sessionLog');alert('Effacé.');}">Effacer setLog + sessionLog</button>
+      </div>
     </div>
   </div>
 
@@ -576,6 +756,17 @@
       <span>Progrès</span>
     </button>
   </nav>
+</div>
+
+<!-- ═══════════════ AUTO REST BUBBLE ═══════════════ -->
+<div id="auto-rest-bubble" onclick="bubbleTapped()">
+  <svg class="arb-ring" viewBox="0 0 62 62">
+    <circle class="arb-ring-track" cx="31" cy="31" r="27"/>
+    <circle class="arb-ring-prog" id="arb-prog" cx="31" cy="31" r="27"
+      stroke-dasharray="169.6" stroke-dashoffset="0"/>
+  </svg>
+  <span class="arb-time" id="arb-time">1:30</span>
+  <span class="arb-label">REPOS</span>
 </div>
 
 <!-- ═══════════════ SET MODAL ═══════════════ -->
@@ -754,6 +945,7 @@ function showPage(name) {
   currentPage = name;
   if (name === 'home') renderHome();
   if (name === 'progress') renderProgress();
+  if (name === 'settings') renderSettingsPage();
 }
 
 function showWorkoutPicker() {
@@ -799,6 +991,22 @@ function renderHome() {
   const h = now.getHours();
   const greet = h < 12 ? 'Bonjour' : h < 18 ? 'Bon après-midi' : 'Bonsoir';
   document.getElementById('home-greeting').textContent = greet + ' Denis 👊';
+
+  // Week banner
+  const week = getCurrentWeek();
+  const weekBanner = document.getElementById('week-banner');
+  if (weekBanner) {
+    weekBanner.innerHTML = `
+      <div class="wb-left">
+        <span class="wb-label">Programme en cours</span>
+        <span class="wb-title">Semaine ${week} ${programStart ? '✓' : ''}</span>
+        <span class="wb-sub">${getWeekLabel(week)}</span>
+      </div>
+      <div class="week-pills">
+        ${[1,2,3,4].map(w => `<button class="week-pill${week===w?' active':''}" onclick="setWeekOverride(${w})">S${w}</button>`).join('')}
+      </div>
+    `;
+  }
 
   // Today banner
   const w = PROGRAM[dayName];
@@ -889,6 +1097,9 @@ function renderSeance(id) {
   document.getElementById('seance-sub').textContent = w.day + ' · ' + w.muscles;
 
   if (!setsDone[id]) setsDone[id] = {};
+  sessionStart = sessionStart || Date.now();
+  sessionPRs = [];
+  sessionMaxByEx = {};
 
   updateProgressBar(id);
 
@@ -1006,6 +1217,10 @@ function makeExCard(workoutId, ex, exIdx, color) {
   }
 
   const noteHtml = ex.note ? `<div class="badge orange">★ ${ex.note}</div>` : '';
+  const week = getCurrentWeek();
+  const refKg = getRefKgForEx(ex.name);
+  const targetKg = refKg ? Math.round(refKg * getWeekCoeff(week) * 2) / 2 : null;
+  const weekBadge = (week > 1 && targetKg) ? `<span class="week-target-badge">Cible S${week} : ~${targetKg} kg</span>` : '';
   const lieuColor = ex.lieu && ex.lieu.includes('Maison') ? '#3A8EE8' : '#E8500A';
 
   // Sets buttons
@@ -1032,7 +1247,7 @@ function makeExCard(workoutId, ex, exIdx, color) {
     <div class="ex-header">
       <div class="ex-num${isSuperset?' ss':''}" style="${!isSuperset?'background:'+color:''}">${ex.num}</div>
       <div class="ex-info">
-        <div class="ex-name">${ex.name}</div>
+        <div class="ex-name">${ex.name}${weekBadge}</div>
         <div class="ex-params">
           <span class="badge">${ex.sets} séries</span>
           <span class="badge orange">${ex.reps} reps</span>
@@ -1183,7 +1398,7 @@ function confirmSet() {
   }
 
   // Démarrer auto-timer repos
-  if (typeof startAutoRestTimer === 'function' && ex.rest > 0) startAutoRestTimer(ex.rest);
+  if (ex.rest > 0) startAutoRestTimer(ex.rest);
 
   // Fermer modal (avec délai si PR pour laisser voir le flash)
   const delay = isPR ? 1500 : 400;
@@ -1192,6 +1407,43 @@ function confirmSet() {
     document.getElementById('set-modal').classList.remove('show');
     _smCtx = null;
   }, delay);
+}
+
+function startAutoRestTimer(sec) {
+  clearInterval(autoRestInterval);
+  autoRestSec = sec;
+  autoRestTotal = sec;
+  const bubble = document.getElementById('auto-rest-bubble');
+  bubble.classList.add('visible');
+  updateArbDisplay();
+  autoRestInterval = setInterval(() => {
+    autoRestSec--;
+    if (autoRestSec <= 0) {
+      beep();
+      stopAutoRestTimer();
+      return;
+    }
+    updateArbDisplay();
+  }, 1000);
+}
+
+function stopAutoRestTimer() {
+  clearInterval(autoRestInterval);
+  autoRestSec = 0;
+  document.getElementById('auto-rest-bubble').classList.remove('visible');
+}
+
+function updateArbDisplay() {
+  document.getElementById('arb-time').textContent = fmtSec(autoRestSec);
+  const pct = autoRestTotal > 0 ? autoRestSec / autoRestTotal : 0;
+  const circ = 169.6;
+  document.getElementById('arb-prog').style.strokeDashoffset = circ * (1 - pct);
+}
+
+function bubbleTapped() {
+  // Synchronise le timer modal existant avec le décompte en cours
+  startModalRest(autoRestSec, 'Prochain exercice');
+  stopAutoRestTimer();
 }
 
 function updateProgressBar(workoutId) {
@@ -1210,17 +1462,7 @@ function updateProgressBar(workoutId) {
 }
 
 function completeSession(id) {
-  const today = new Date().toISOString().slice(0,10);
-  completedSessions.push({ id, date: today, time: Date.now() });
-  localStorage.setItem('completedSessions', JSON.stringify(completedSessions));
-  // Show confirmation
-  const btn = document.querySelector('#seance-content button:last-child');
-  if (btn) {
-    btn.textContent = '✅ Séance enregistrée !';
-    btn.style.background = '#2DBD6E';
-    btn.disabled = true;
-  }
-  setTimeout(() => { goBack(); renderHome(); }, 1200);
+  showSessionSummary(id);
 }
 
 function launchHIIT(workoutId) {
@@ -1416,15 +1658,13 @@ function updateHiitDisplay() {
 // PROGRESS
 // ══════════════════════════════════════════════
 function renderProgress() {
-  // 4-week progression plan
+  // Progression plan (inchangé)
   const progSection = document.getElementById('prog-plan-section');
   if (progSection) {
     progSection.innerHTML = `
       <div class="card" style="padding:0;overflow:hidden">
         <table class="prog-week-table">
-          <thead><tr>
-            <th>Semaine</th><th>Charge</th><th>Séries</th><th>Repos</th><th>Objectif</th>
-          </tr></thead>
+          <thead><tr><th>Semaine</th><th>Charge</th><th>Séries</th><th>Repos</th><th>Objectif</th></tr></thead>
           <tbody>
             <tr><td class="prog-week-label">S1</td><td>75% 1RM</td><td>Comme indiqué</td><td>Normal</td><td>Tempos + sensations</td></tr>
             <tr><td class="prog-week-label">S2</td><td>+5%</td><td>Comme indiqué</td><td>Normal</td><td>Échec sur dernière série</td></tr>
@@ -1441,60 +1681,203 @@ function renderProgress() {
       </div>
     `;
   }
+  switchProgressTab('sessions');
+}
 
-  // Completed sessions
-  const sessEl = document.getElementById('completed-sessions-list');
-  if (!completedSessions.length) {
-    sessEl.innerHTML = '<div class="empty-state"><div class="es-icon">🏋️</div><p>Aucune séance enregistrée.<br>Complète ta première séance !</p></div>';
-  } else {
-    const recent = [...completedSessions].reverse().slice(0, 10);
-    sessEl.innerHTML = recent.map(s => {
-      const w = PROGRAM[s.id];
-      const d = new Date(s.date);
-      const label = d.toLocaleDateString('fr-FR', { weekday:'short', day:'numeric', month:'short' });
-      return `<div class="card-sm" style="display:flex;align-items:center;gap:10px">
-        <div style="font-size:20px">${w?.icon||'💪'}</div>
-        <div style="flex:1">
-          <div style="font-size:14px;font-weight:700">${w?.name||s.id}</div>
-          <div style="font-size:12px;color:var(--muted)">${label}</div>
-        </div>
-        <div style="color:var(--green);font-size:13px;font-weight:700">✓</div>
-      </div>`;
-    }).join('');
-  }
-
-  // Weight log
-  const wlogEl = document.getElementById('weight-log-list');
-  const allExercises = [];
-  Object.values(PROGRAM).forEach(w => {
-    if (w.exercises) w.exercises.forEach(ex => {
-      if (!allExercises.find(e => e.name === ex.name)) allExercises.push({ name: ex.name, workout: w.name });
-    });
+function switchProgressTab(tab) {
+  ['sessions','curves','body'].forEach(t => {
+    document.getElementById('ptab-' + t)?.classList.toggle('active', t === tab);
+    const c = document.getElementById('ptab-content-' + t);
+    if (c) c.style.display = t === tab ? '' : 'none';
   });
+  if (tab === 'sessions') renderSessionsTab();
+  if (tab === 'curves')   renderCurvesTab();
+  if (tab === 'body')     renderBodyTab();
+}
 
-  wlogEl.innerHTML = allExercises.slice(0, 14).map(ex => {
-    const key = btoa(ex.name).replace(/[^a-z0-9]/gi,'');
-    const history = weightLog[key] || [];
-    const lastEntry = history[history.length-1];
-    const histHtml = history.slice(-5).reverse().map(e =>
-      `<div class="hist-entry"><span class="hist-date">${e.date}</span><span class="hist-kg">${e.kg} kg</span></div>`
-    ).join('');
-    return `
-      <div class="weight-card" onclick="toggleWC('wc-${key}')">
-        <div class="wc-header">
-          <div class="wc-name">${ex.name}</div>
-          <div class="wc-last">${lastEntry ? lastEntry.kg + ' kg' : 'Non enregistré'}</div>
+function renderSessionsTab() {
+  const el = document.getElementById('ptab-content-sessions');
+  if (!el) return;
+
+  const all = [...completedSessions].reverse().slice(0, 15);
+  if (!all.length) {
+    el.innerHTML = '<div class="empty-state"><div class="es-icon">🏋️</div><p>Aucune séance enregistrée.<br>Complète ta première séance !</p></div>';
+    return;
+  }
+  el.innerHTML = all.map((s, i) => {
+    const w = PROGRAM[s.id];
+    const d = new Date(s.date);
+    const label = d.toLocaleDateString('fr-FR', { weekday:'short', day:'numeric', month:'short' });
+    const sKey = `${s.date}_${s.id}`;
+    const sData = sessionLog[sKey] || {};
+    const badges = [
+      sData.volume ? `<span class="sce-badge sce-badge-vol">⚖️ ${(sData.volume).toLocaleString('fr-FR')} kg</span>` : '',
+      sData.prs?.length ? `<span class="sce-badge sce-badge-pr">🏆 ${sData.prs.length} PR${sData.prs.length>1?'s':''}</span>` : '',
+      sData.rating ? `<span class="sce-badge sce-badge-stars">${'⭐'.repeat(sData.rating)}</span>` : '',
+    ].filter(Boolean).join('');
+    const noteHtml = sData.note ? `<div class="sce-note">${sData.note}</div>` : '';
+    return `<div class="session-card-enriched" onclick="this.classList.toggle('open')">
+      <div class="sce-row1">
+        <span class="sce-icon">${w?.icon||'💪'}</span>
+        <div class="sce-info">
+          <div class="sce-name">${w?.name||s.id}</div>
+          <div class="sce-meta">${label}${sData.duration ? ' · ' + sData.duration + ' min' : ''}</div>
         </div>
-        <div class="wc-expand" id="wc-${key}">
-          <div class="weight-input-row">
-            <input class="weight-input" type="number" placeholder="Charge (kg)" id="wi-${key}" step="0.5">
-            <button class="save-w-btn" onclick="saveWeight(event,'${key}','${ex.name.replace(/'/g,"\\'")}')">Sauver</button>
-          </div>
-          <div class="history-list">${histHtml || '<div style="color:var(--muted);font-size:13px;padding:4px 0">Aucun historique</div>'}</div>
+        <div style="color:var(--green);font-size:14px;font-weight:700">✓</div>
+      </div>
+      ${badges ? `<div class="sce-badges">${badges}</div>` : ''}
+      ${noteHtml}
+    </div>`;
+  }).join('');
+}
+
+function drawChart(containerId, points, color) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  if (points.length < 2) {
+    el.innerHTML = '<div class="chart-empty">Complète au moins 2 séances pour voir la courbe</div>';
+    return;
+  }
+  const W = 300, H = 90;
+  const PAD = { top: 18, right: 12, bottom: 22, left: 34 };
+  const kgs = points.map(p => p.kg);
+  const minKg = Math.min(...kgs) * 0.95;
+  const maxKg = Math.max(...kgs) * 1.02;
+  const maxKgVal = Math.max(...kgs);
+  const xS = i => PAD.left + (i / (points.length - 1)) * (W - PAD.left - PAD.right);
+  const yS = kg => PAD.top + (1 - (kg - minKg) / (maxKg - minKg)) * (H - PAD.top - PAD.bottom);
+
+  const path = points.map((p, i) => `${i===0?'M':'L'}${xS(i).toFixed(1)},${yS(p.kg).toFixed(1)}`).join(' ');
+
+  const dots = points.map((p, i) => {
+    const isPR = p.kg >= maxKgVal;
+    const cx = xS(i).toFixed(1), cy = yS(p.kg).toFixed(1);
+    const dateLbl = p.date.slice(5).replace('-','/');
+    return `${isPR ? `<text x="${cx}" y="${(parseFloat(cy)-9).toFixed(1)}" fill="#2DBD6E" font-size="8" text-anchor="middle" font-weight="bold">PR</text>` : ''}
+    <circle cx="${cx}" cy="${cy}" r="${isPR?5:3}" fill="${isPR?'#2DBD6E':color}"/>
+    <text x="${cx}" y="${H-3}" fill="#555" font-size="8" text-anchor="middle">${dateLbl}</text>`;
+  }).join('');
+
+  const yMid = ((minKg + maxKg) / 2);
+  const yLabels = [minKg, yMid, maxKg].map(kg => {
+    const y = yS(kg);
+    return `<text x="${PAD.left-3}" y="${y.toFixed(1)}" fill="#555" font-size="8" text-anchor="end" dominant-baseline="middle">${Math.round(kg)}</text>`;
+  }).join('');
+
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="overflow:visible;display:block">
+    <line x1="${PAD.left}" y1="${PAD.top}" x2="${PAD.left}" y2="${H-PAD.bottom}" stroke="#2a2a2a" stroke-width="1"/>
+    <line x1="${PAD.left}" y1="${H-PAD.bottom}" x2="${W-PAD.right}" y2="${H-PAD.bottom}" stroke="#2a2a2a" stroke-width="1"/>
+    ${yLabels}
+    <path d="${path}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    ${dots}
+  </svg>`;
+}
+
+function renderCurvesTab() {
+  const el = document.getElementById('ptab-content-curves');
+  if (!el) return;
+
+  const KEY_EXERCISES = [
+    { name: 'Développé couché à la barre',     color: '#E8500A', icon: '🏋' },
+    { name: 'Squat barre libre',                color: '#2A7A2A', icon: '🦵' },
+    { name: 'Soulevé de terre barre',           color: '#8A1A8A', icon: '⚡' },
+    { name: 'Tractions lestées (ou Tirage Poitrine)', color: '#1A4D8A', icon: '🔥' },
+    { name: 'Développé militaire debout',       color: '#E8500A', icon: '💪' },
+    { name: 'Rowing buste penché à la barre',   color: '#1A4D8A', icon: '🏃' },
+  ];
+
+  el.innerHTML = KEY_EXERCISES.map((ex, idx) => {
+    const points = Object.entries(sessionLog)
+      .map(([key, s]) => ({ date: key.split('_')[0], kg: s.maxByEx?.[ex.name]?.kg || 0 }))
+      .filter(p => p.kg > 0)
+      .sort((a, b) => a.date.localeCompare(b.date));
+
+    return `<div class="chart-card">
+      <div class="chart-card-title">${ex.icon} ${ex.name.split(' ').slice(0,3).join(' ')}</div>
+      <div id="chart-${idx}"></div>
+    </div>`;
+  }).join('');
+
+  KEY_EXERCISES.forEach((ex, idx) => {
+    const points = Object.entries(sessionLog)
+      .map(([key, s]) => ({ date: key.split('_')[0], kg: s.maxByEx?.[ex.name]?.kg || 0 }))
+      .filter(p => p.kg > 0)
+      .sort((a, b) => a.date.localeCompare(b.date));
+    drawChart(`chart-${idx}`, points, ex.color);
+  });
+}
+
+function renderBodyTab() {
+  const el = document.getElementById('ptab-content-body');
+  if (!el) return;
+
+  const recentHistory = [...bodyLog].reverse().slice(0, 10);
+  const histHtml = recentHistory.length
+    ? recentHistory.map(e => `
+        <div class="body-history-row">
+          <span class="body-hist-date">${e.date}</span>
+          <span class="body-hist-val">${e.weight} kg</span>
+          <span class="body-hist-extra">${[
+            e.waist ? `taille ${e.waist}cm` : '',
+            e.arm   ? `bras ${e.arm}cm`   : '',
+            e.thigh ? `cuisse ${e.thigh}cm` : ''
+          ].filter(Boolean).join(' · ')}</span>
+        </div>`).join('')
+    : '<div style="padding:14px;text-align:center;font-size:13px;color:var(--muted)">Aucune entrée</div>';
+
+  el.innerHTML = `
+    <div class="body-form">
+      <div class="body-form-title">⚖️ Enregistrer aujourd'hui</div>
+      <div class="body-fields">
+        <div class="body-field" style="grid-column:1/-1">
+          <label>Poids corporel (kg) *</label>
+          <input id="bf-weight" type="number" step="0.1" min="30" max="200" placeholder="82.5" inputmode="decimal">
+        </div>
+        <div class="body-field">
+          <label>Tour de taille (cm)</label>
+          <input id="bf-waist" type="number" step="0.5" placeholder="84" inputmode="decimal">
+        </div>
+        <div class="body-field">
+          <label>Bras fléchi (cm)</label>
+          <input id="bf-arm" type="number" step="0.5" placeholder="40" inputmode="decimal">
+        </div>
+        <div class="body-field">
+          <label>Cuisse (cm)</label>
+          <input id="bf-thigh" type="number" step="0.5" placeholder="58" inputmode="decimal">
         </div>
       </div>
-    `;
-  }).join('');
+      <button class="body-save-btn" onclick="saveBodyEntry()">Enregistrer</button>
+    </div>
+    <h3 style="margin:0 0 8px">Historique</h3>
+    <div class="body-history">${histHtml}</div>
+    <div id="body-chart-wrap" style="margin-top:14px">
+      <div class="chart-card">
+        <div class="chart-card-title">⚖️ Poids corporel</div>
+        <div id="body-weight-chart"></div>
+      </div>
+    </div>
+  `;
+
+  const weightPoints = [...bodyLog]
+    .filter(e => e.weight > 0)
+    .slice(-20)
+    .map(e => ({ date: e.date, kg: e.weight }));
+  drawChart('body-weight-chart', weightPoints, '#3A8EE8');
+}
+
+function saveBodyEntry() {
+  const weight = parseFloat(document.getElementById('bf-weight')?.value) || 0;
+  if (!weight) { alert('Le poids est obligatoire.'); return; }
+  const entry = {
+    date: new Date().toLocaleDateString('fr-FR', { day:'numeric', month:'short' }),
+    weight,
+    waist: parseFloat(document.getElementById('bf-waist')?.value) || null,
+    arm:   parseFloat(document.getElementById('bf-arm')?.value)   || null,
+    thigh: parseFloat(document.getElementById('bf-thigh')?.value) || null,
+  };
+  bodyLog.push(entry);
+  localStorage.setItem('bodyLog', JSON.stringify(bodyLog));
+  renderBodyTab();
 }
 
 function toggleWC(id) {
@@ -1574,6 +1957,117 @@ function saveProgramStart(dateStr) {
   localStorage.setItem('programStart', dateStr);
   currentWeek = null;
   localStorage.removeItem('currentWeek');
+}
+
+function renderSettingsPage() {
+  const inp = document.getElementById('settings-program-start');
+  if (inp && programStart) inp.value = programStart;
+}
+
+function saveSettingsProgramStart() {
+  const val = document.getElementById('settings-program-start').value;
+  if (!val) return;
+  saveProgramStart(val);
+  alert('Date de départ enregistrée. Semaine recalculée automatiquement.');
+  showPage('home');
+}
+
+function resetProgram() {
+  if (!confirm('Réinitialiser la date de départ et la semaine ?')) return;
+  programStart = null;
+  currentWeek = null;
+  localStorage.removeItem('programStart');
+  localStorage.removeItem('currentWeek');
+  alert('Programme réinitialisé.');
+  showPage('home');
+}
+
+function showSessionSummary(id) {
+  _summaryWorkoutId = id;
+  _currentRating = 0;
+
+  const w = PROGRAM[id];
+  const durationMin = sessionStart ? Math.round((Date.now() - sessionStart) / 60000) : 0;
+  const volume = calcVolume(id);
+
+  // Compter séries complétées
+  let totalSets = 0, doneSets = 0;
+  w.exercises.forEach((ex, exIdx) => {
+    for (let s = 0; s < ex.sets; s++) {
+      totalSets++;
+      if (setsDone[id]?.[`${id}_${exIdx}_${s}`]) doneSets++;
+    }
+  });
+
+  // Remplir le résumé
+  document.getElementById('summary-emoji').textContent = w.icon;
+  document.getElementById('summary-name').textContent = `${w.name} terminée !`;
+  document.getElementById('summary-meta').textContent = `${new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})}${durationMin ? ' · ' + durationMin + ' min' : ''}`;
+  document.getElementById('summary-volume').textContent = volume > 0 ? volume.toLocaleString('fr-FR') : '—';
+  document.getElementById('summary-sets').textContent = `${doneSets}/${totalSets}`;
+
+  // PRs
+  const prsBlock = document.getElementById('summary-prs-block');
+  const prsList = document.getElementById('summary-prs-list');
+  if (sessionPRs.length > 0) {
+    prsBlock.style.display = '';
+    prsList.innerHTML = sessionPRs.map(p => `<div class="summary-pr-item">🏆 ${p}</div>`).join('');
+  } else {
+    prsBlock.style.display = 'none';
+  }
+
+  // Reset étoiles
+  document.querySelectorAll('.star-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('summary-note').value = '';
+
+  // Afficher la page
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-summary').classList.add('active');
+  currentPage = 'summary';
+}
+
+function setRating(val) {
+  _currentRating = val;
+  document.querySelectorAll('.star-btn').forEach(b => {
+    b.classList.toggle('active', parseInt(b.dataset.val) <= val);
+  });
+}
+
+function saveSessionSummary() {
+  const id = _summaryWorkoutId;
+  if (!id) return;
+
+  const today = new Date().toISOString().slice(0, 10);
+  const sessionKey = `${today}_${id}`;
+  const durationMin = sessionStart ? Math.round((Date.now() - sessionStart) / 60000) : 0;
+
+  // Sauvegarder dans completedSessions (compatibilité existante)
+  completedSessions.push({ id, date: today, time: Date.now() });
+  localStorage.setItem('completedSessions', JSON.stringify(completedSessions));
+
+  // Sauvegarder dans sessionLog (nouveau)
+  sessionLog[sessionKey] = {
+    duration: durationMin,
+    volume: calcVolume(id),
+    rating: _currentRating,
+    note: document.getElementById('summary-note').value.trim(),
+    prs: sessionPRs.slice(),
+    week: getCurrentWeek(),
+    maxByEx: { ...sessionMaxByEx }
+  };
+  localStorage.setItem('sessionLog', JSON.stringify(sessionLog));
+
+  // Réinitialiser état session
+  sessionStart = null;
+  sessionPRs = [];
+  sessionMaxByEx = {};
+  setLog = {};
+  localStorage.removeItem('setLog');
+
+  // Retour accueil
+  goBack();
+  renderHome();
 }
 
 // ══════════════════════════════════════════════
