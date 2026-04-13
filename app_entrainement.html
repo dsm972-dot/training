@@ -278,6 +278,30 @@
 .settings-reset-btn { width: 100%; background: transparent; color: var(--muted); border: 1.5px solid #333; border-radius: 10px; padding: 10px; font-size: 13px; font-weight: 700; margin-top: 6px; cursor: pointer; }
 .settings-gear { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; padding: 4px; }
 
+/* ─── SESSION SUMMARY ─── */
+#page-summary { justify-content: flex-start; }
+.summary-confetti { height: 5px; background: linear-gradient(90deg,#E8500A,#9B3AE8,#2DBD6E,#E8500A); background-size: 200%; animation: confetti 2s linear infinite; }
+@keyframes confetti { to { background-position: 200%; } }
+.summary-hero { text-align: center; padding: 28px 16px 20px; }
+.summary-emoji { font-size: 48px; display: block; margin-bottom: 8px; }
+.summary-name { font-size: 22px; font-weight: 800; }
+.summary-meta { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.summary-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 16px; margin-bottom: 16px; }
+.summary-stat { background: var(--card); border-radius: var(--radius); padding: 16px; text-align: center; }
+.summary-stat-val { font-size: 24px; font-weight: 800; color: var(--orange); }
+.summary-stat-label { font-size: 11px; color: var(--muted); margin-top: 3px; }
+.summary-prs { margin: 0 16px 16px; background: rgba(45,189,110,.08); border: 1px solid rgba(45,189,110,.25); border-radius: var(--radius); padding: 12px 14px; }
+.summary-prs-title { font-size: 11px; font-weight: 800; color: var(--green); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 8px; }
+.summary-pr-item { font-size: 13px; color: var(--text); padding: 3px 0; }
+.summary-rating { padding: 0 16px 12px; }
+.summary-rating-label { font-size: 13px; font-weight: 700; text-align: center; margin-bottom: 10px; }
+.stars-row { display: flex; gap: 8px; justify-content: center; margin-bottom: 12px; }
+.star-btn { font-size: 30px; cursor: pointer; opacity: .3; transition: opacity .15s, transform .15s; background: none; border: none; padding: 0; }
+.star-btn.active { opacity: 1; transform: scale(1.15); }
+.summary-note { width: 100%; background: var(--card); border: 1.5px solid #333; border-radius: 10px; color: var(--text); font-size: 14px; font-family: inherit; padding: 12px 14px; box-sizing: border-box; resize: none; }
+.summary-note:focus { outline: none; border-color: var(--orange); }
+.summary-save-btn { display: block; width: calc(100% - 32px); margin: 14px 16px; background: var(--green); color: #fff; border: none; border-radius: var(--radius); padding: 16px; font-size: 16px; font-weight: 800; cursor: pointer; }
+
     /* ─── TIMER PAGE ─── */
     .timer-container { display: flex; flex-direction: column; align-items: center; padding: 20px 16px; }
     .timer-type-toggle { display: flex; gap: 8px; width: 100%; margin-bottom: 24px; }
@@ -608,6 +632,42 @@
 
       <div style="height:8px"></div>
     </div>
+  </div>
+
+  <!-- ═══════════════ PAGE RÉSUMÉ SÉANCE ═══════════════ -->
+  <div id="page-summary" class="page">
+    <div class="summary-confetti"></div>
+    <div class="summary-hero">
+      <span class="summary-emoji" id="summary-emoji">💪</span>
+      <div class="summary-name" id="summary-name">Séance terminée !</div>
+      <div class="summary-meta" id="summary-meta"></div>
+    </div>
+    <div class="summary-stats">
+      <div class="summary-stat">
+        <div class="summary-stat-val" id="summary-volume">0</div>
+        <div class="summary-stat-label">kg soulevés</div>
+      </div>
+      <div class="summary-stat">
+        <div class="summary-stat-val" id="summary-sets">0/0</div>
+        <div class="summary-stat-label">séries ✓</div>
+      </div>
+    </div>
+    <div class="summary-prs" id="summary-prs-block" style="display:none">
+      <div class="summary-prs-title">🏆 Records du jour</div>
+      <div id="summary-prs-list"></div>
+    </div>
+    <div class="summary-rating">
+      <div class="summary-rating-label">Comment tu te sens ?</div>
+      <div class="stars-row" id="stars-row">
+        <button class="star-btn" data-val="1" onclick="setRating(1)">⭐</button>
+        <button class="star-btn" data-val="2" onclick="setRating(2)">⭐</button>
+        <button class="star-btn" data-val="3" onclick="setRating(3)">⭐</button>
+        <button class="star-btn" data-val="4" onclick="setRating(4)">⭐</button>
+        <button class="star-btn" data-val="5" onclick="setRating(5)">⭐</button>
+      </div>
+      <textarea class="summary-note" id="summary-note" rows="2" placeholder="Note rapide… (optionnel)"></textarea>
+    </div>
+    <button class="summary-save-btn" onclick="saveSessionSummary()">✅ Enregistrer la séance</button>
   </div>
 
   <!-- ═══════════════ PAGE PARAMÈTRES ═══════════════ -->
@@ -995,6 +1055,9 @@ function renderSeance(id) {
   document.getElementById('seance-sub').textContent = w.day + ' · ' + w.muscles;
 
   if (!setsDone[id]) setsDone[id] = {};
+  sessionStart = sessionStart || Date.now();
+  sessionPRs = [];
+  sessionMaxByEx = {};
 
   updateProgressBar(id);
 
@@ -1357,17 +1420,7 @@ function updateProgressBar(workoutId) {
 }
 
 function completeSession(id) {
-  const today = new Date().toISOString().slice(0,10);
-  completedSessions.push({ id, date: today, time: Date.now() });
-  localStorage.setItem('completedSessions', JSON.stringify(completedSessions));
-  // Show confirmation
-  const btn = document.querySelector('#seance-content button:last-child');
-  if (btn) {
-    btn.textContent = '✅ Séance enregistrée !';
-    btn.style.background = '#2DBD6E';
-    btn.disabled = true;
-  }
-  setTimeout(() => { goBack(); renderHome(); }, 1200);
+  showSessionSummary(id);
 }
 
 function launchHIIT(workoutId) {
@@ -1744,6 +1797,94 @@ function resetProgram() {
   localStorage.removeItem('currentWeek');
   alert('Programme réinitialisé.');
   showPage('home');
+}
+
+function showSessionSummary(id) {
+  _summaryWorkoutId = id;
+  _currentRating = 0;
+
+  const w = PROGRAM[id];
+  const durationMin = sessionStart ? Math.round((Date.now() - sessionStart) / 60000) : 0;
+  const volume = calcVolume(id);
+
+  // Compter séries complétées
+  let totalSets = 0, doneSets = 0;
+  w.exercises.forEach((ex, exIdx) => {
+    for (let s = 0; s < ex.sets; s++) {
+      totalSets++;
+      if (setsDone[id]?.[`${id}_${exIdx}_${s}`]) doneSets++;
+    }
+  });
+
+  // Remplir le résumé
+  document.getElementById('summary-emoji').textContent = w.icon;
+  document.getElementById('summary-name').textContent = `${w.name} terminée !`;
+  document.getElementById('summary-meta').textContent = `${new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})}${durationMin ? ' · ' + durationMin + ' min' : ''}`;
+  document.getElementById('summary-volume').textContent = volume > 0 ? volume.toLocaleString('fr-FR') : '—';
+  document.getElementById('summary-sets').textContent = `${doneSets}/${totalSets}`;
+
+  // PRs
+  const prsBlock = document.getElementById('summary-prs-block');
+  const prsList = document.getElementById('summary-prs-list');
+  if (sessionPRs.length > 0) {
+    prsBlock.style.display = '';
+    prsList.innerHTML = sessionPRs.map(p => `<div class="summary-pr-item">🏆 ${p}</div>`).join('');
+  } else {
+    prsBlock.style.display = 'none';
+  }
+
+  // Reset étoiles
+  document.querySelectorAll('.star-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('summary-note').value = '';
+
+  // Afficher la page
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-summary').classList.add('active');
+  currentPage = 'summary';
+}
+
+function setRating(val) {
+  _currentRating = val;
+  document.querySelectorAll('.star-btn').forEach(b => {
+    b.classList.toggle('active', parseInt(b.dataset.val) <= val);
+  });
+}
+
+function saveSessionSummary() {
+  const id = _summaryWorkoutId;
+  if (!id) return;
+
+  const today = new Date().toISOString().slice(0, 10);
+  const sessionKey = `${today}_${id}`;
+  const durationMin = sessionStart ? Math.round((Date.now() - sessionStart) / 60000) : 0;
+
+  // Sauvegarder dans completedSessions (compatibilité existante)
+  completedSessions.push({ id, date: today, time: Date.now() });
+  localStorage.setItem('completedSessions', JSON.stringify(completedSessions));
+
+  // Sauvegarder dans sessionLog (nouveau)
+  sessionLog[sessionKey] = {
+    duration: durationMin,
+    volume: calcVolume(id),
+    rating: _currentRating,
+    note: document.getElementById('summary-note').value.trim(),
+    prs: sessionPRs.slice(),
+    week: getCurrentWeek(),
+    maxByEx: { ...sessionMaxByEx }
+  };
+  localStorage.setItem('sessionLog', JSON.stringify(sessionLog));
+
+  // Réinitialiser état session
+  sessionStart = null;
+  sessionPRs = [];
+  sessionMaxByEx = {};
+  setLog = {};
+  localStorage.removeItem('setLog');
+
+  // Retour accueil
+  goBack();
+  renderHome();
 }
 
 // ══════════════════════════════════════════════
