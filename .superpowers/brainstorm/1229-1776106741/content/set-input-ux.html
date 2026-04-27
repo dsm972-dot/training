@@ -1,0 +1,154 @@
+<style>
+  .phone-frame {
+    width: 100%;
+    max-width: 300px;
+    background: #141414;
+    border-radius: 20px;
+    border: 2px solid #333;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #F0F0F0;
+    font-size: 13px;
+  }
+  .phone-header {
+    background: #1E1E1E;
+    padding: 10px 14px;
+    border-bottom: 1px solid #2a2a2a;
+  }
+  .ex-name { font-weight: 800; font-size: 13px; }
+  .ex-meta { color: #888; font-size: 11px; margin-top: 2px; }
+  .sets-row { display: flex; gap: 6px; padding: 10px 14px; flex-wrap: wrap; }
+  .set-btn { width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; border: none; cursor: pointer; flex-direction: column; gap: 1px; }
+  .set-done { background: #2DBD6E; color: #fff; }
+  .set-done-kg { background: #2DBD6E; color: #fff; font-size: 10px; line-height: 1.1; }
+  .set-pending { background: #2a2a2a; color: #888; }
+  .set-active { background: #E8500A; color: #fff; }
+  .modal-overlay { background: rgba(0,0,0,.7); padding: 12px 14px 14px; }
+  .modal-title { font-size: 11px; font-weight: 800; color: #888; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+  .modal-prev { font-size: 11px; color: #555; margin-bottom: 8px; }
+  .modal-inputs { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+  .num-input { background: #1E1E1E; border: 1.5px solid #E8500A; border-radius: 8px; color: #fff; padding: 8px 10px; font-size: 16px; font-weight: 800; text-align: center; width: 72px; }
+  .unit-lbl { color: #888; font-size: 12px; }
+  .confirm-btn { background: #2DBD6E; color: #fff; border: none; border-radius: 8px; padding: 10px; font-size: 13px; font-weight: 800; width: 100%; cursor: pointer; }
+  .inline-expand { background: #1a1a1a; border-top: 1px solid #2a2a2a; padding: 8px 14px; display: flex; gap: 8px; align-items: center; }
+  .set-logged { background: #2DBD6E22; border: 1.5px solid #2DBD6E; border-radius: 8px; padding: 4px 8px; text-align: center; }
+  .set-logged-w { font-size: 13px; font-weight: 800; color: #2DBD6E; }
+  .set-logged-r { font-size: 10px; color: #2DBD6E88; }
+  .snap-row { display: flex; gap: 6px; overflow-x: auto; padding: 8px 14px; }
+  .snap-preset { background: #252525; border-radius: 8px; padding: 6px 10px; font-size: 12px; font-weight: 700; white-space: nowrap; color: #ccc; border: 1.5px solid #333; }
+  .snap-preset.active-p { border-color: #E8500A; color: #E8500A; background: #E8500A15; }
+</style>
+
+<h2>Comment l'entrée poids + reps s'ouvre-t-elle ?</h2>
+<p class="subtitle">Quel feeling en salle entre les séries ?</p>
+
+<div class="cards" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;max-width:960px;margin:0 auto">
+
+  <!-- OPTION A : MODAL SLIDE-UP -->
+  <div class="card" data-choice="modal" onclick="toggleSelect(this)">
+    <div class="card-body" style="padding-bottom:8px">
+      <h3>A — Modal glissante</h3>
+      <p>Tap série → fiche de saisie remonte du bas de l'écran. Focus immédiat sur le clavier numérique.</p>
+    </div>
+    <div class="card-image" style="padding:0 12px 12px">
+      <div class="phone-frame">
+        <div class="phone-header">
+          <div class="ex-name">Développé couché</div>
+          <div class="ex-meta">5 séries · 4-5 reps · Tempo 4-0-1-0</div>
+        </div>
+        <div class="sets-row">
+          <div class="set-btn set-done-kg"><span>1</span><span>100kg</span></div>
+          <div class="set-btn set-done-kg"><span>2</span><span>100kg</span></div>
+          <div class="set-btn set-active">3</div>
+          <div class="set-btn set-pending">4</div>
+          <div class="set-btn set-pending">5</div>
+        </div>
+        <div class="modal-overlay">
+          <div class="modal-title">Série 3 · Développé couché</div>
+          <div class="modal-prev">Série 2 : 100 kg × 5 reps</div>
+          <div class="modal-inputs">
+            <input class="num-input" value="100" readonly>
+            <span class="unit-lbl">kg</span>
+            <span style="color:#555">×</span>
+            <input class="num-input" value="5" readonly>
+            <span class="unit-lbl">reps</span>
+          </div>
+          <button class="confirm-btn">✓ Valider la série</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPTION B : INLINE EXPAND -->
+  <div class="card" data-choice="inline" onclick="toggleSelect(this)">
+    <div class="card-body" style="padding-bottom:8px">
+      <h3>B — Expansion en ligne</h3>
+      <p>Tap série → la carte s'ouvre sous les boutons. Saisie compacte sans quitter la vue des exercices.</p>
+    </div>
+    <div class="card-image" style="padding:0 12px 12px">
+      <div class="phone-frame">
+        <div class="phone-header">
+          <div class="ex-name">Développé couché</div>
+          <div class="ex-meta">5 séries · 4-5 reps · Tempo 4-0-1-0</div>
+        </div>
+        <div class="sets-row">
+          <div class="set-btn set-done-kg"><span>1</span><span>100kg</span></div>
+          <div class="set-btn set-done-kg"><span>2</span><span>100kg</span></div>
+          <div class="set-btn set-active">3 ▾</div>
+          <div class="set-btn set-pending">4</div>
+          <div class="set-btn set-pending">5</div>
+        </div>
+        <div class="inline-expand">
+          <input class="num-input" style="width:60px" value="100" readonly>
+          <span class="unit-lbl">kg</span>
+          <input class="num-input" style="width:52px" value="5" readonly>
+          <span class="unit-lbl">reps</span>
+          <button class="confirm-btn" style="width:auto;padding:8px 14px;margin-left:auto">✓</button>
+        </div>
+        <div style="padding:6px 14px 10px">
+          <div style="font-size:11px;color:#555">Série 1 : 100 kg × 5 · Série 2 : 100 kg × 5</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPTION C : QUICK-TAP + PRESETS -->
+  <div class="card" data-choice="quicktap" onclick="toggleSelect(this)">
+    <div class="card-body" style="padding-bottom:8px">
+      <h3>C — Tap rapide + presets</h3>
+      <p>Tap = répète le dernier poids/reps automatiquement. <strong>Glisse</strong> le bouton pour modifier. Presets rapides pour ajuster ±2.5 kg.</p>
+    </div>
+    <div class="card-image" style="padding:0 12px 12px">
+      <div class="phone-frame">
+        <div class="phone-header">
+          <div class="ex-name">Développé couché</div>
+          <div class="ex-meta">Tap = 100 kg × 5 · Glisser pour modifier</div>
+        </div>
+        <div class="sets-row">
+          <div class="set-btn set-done-kg"><span>1</span><span>100kg</span></div>
+          <div class="set-btn set-done-kg"><span>2</span><span>100kg</span></div>
+          <div class="set-btn set-done-kg"><span>3</span><span>97.5</span></div>
+          <div class="set-btn set-active">4 ▸</div>
+          <div class="set-btn set-pending">5</div>
+        </div>
+        <div class="snap-row">
+          <div class="snap-preset">−5</div>
+          <div class="snap-preset">−2.5</div>
+          <div class="snap-preset active-p">100 kg</div>
+          <div class="snap-preset">+2.5</div>
+          <div class="snap-preset">+5</div>
+          <div class="snap-preset">Autre…</div>
+        </div>
+        <div style="padding:6px 14px 10px">
+          <div style="font-size:11px;color:#555">Reps : 4 · 5 · 4 · … · …</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<p style="margin-top:16px;font-size:13px;opacity:.6;text-align:center">
+  A = précision maximale · B = fluidité · C = vitesse avec mémorisation auto<br>
+  Réponds dans le terminal.
+</p>

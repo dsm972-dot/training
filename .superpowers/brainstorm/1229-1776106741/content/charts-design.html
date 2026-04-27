@@ -1,0 +1,200 @@
+<style>
+  .phone {
+    background: #141414; border-radius: 18px; border: 2px solid #2a2a2a;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif; color: #F0F0F0;
+    font-size: 13px; overflow: hidden; width: 100%; max-width: 260px;
+  }
+  .ph-scroll { padding: 14px; }
+  .ph-title { font-size: 18px; font-weight: 800; margin-bottom: 2px; }
+  .ph-sub { color: #888; font-size: 11px; margin-bottom: 12px; }
+
+  /* Tab bar */
+  .mini-tabs { display: flex; gap: 4px; margin-bottom: 12px; }
+  .mtab { flex: 1; text-align: center; padding: 5px 4px; font-size: 10px; font-weight: 700; border-radius: 8px; background: #1E1E1E; color: #888; }
+  .mtab.active { background: #E8500A15; color: #E8500A; }
+
+  /* Chart mockup */
+  .chart-box { background: #1E1E1E; border-radius: 10px; padding: 10px; margin-bottom: 10px; }
+  .chart-title { font-size: 11px; font-weight: 800; color: #E8500A; margin-bottom: 8px; }
+  .chart-svg { width: 100%; height: 70px; }
+  .chart-labels { display: flex; justify-content: space-between; font-size: 9px; color: #555; margin-top: 2px; }
+
+  /* PR row */
+  .pr-row { display: flex; align-items: center; gap: 6px; background: #2DBD6E15; border: 1px solid #2DBD6E33; border-radius: 8px; padding: 6px 10px; margin-bottom: 6px; }
+  .pr-badge { background: #2DBD6E; color: #fff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; flex-shrink: 0; }
+  .pr-name { font-size: 11px; font-weight: 700; flex: 1; }
+  .pr-val { font-size: 12px; font-weight: 800; color: #2DBD6E; }
+
+  /* Stat cards */
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 10px; }
+  .stat-card { background: #1E1E1E; border-radius: 8px; padding: 8px; text-align: center; }
+  .stat-val { font-size: 16px; font-weight: 800; color: #E8500A; }
+  .stat-label { font-size: 9px; color: #555; margin-top: 1px; }
+
+  /* Scrollable chart list */
+  .chart-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+  .chart-mini { background: #1E1E1E; border-radius: 8px; padding: 8px; min-width: 140px; flex-shrink: 0; }
+  .chart-mini-title { font-size: 10px; font-weight: 800; color: #E8500A; margin-bottom: 6px; }
+</style>
+
+<h2>Format des graphiques de progression</h2>
+<p class="subtitle">Où vivent les courbes et quels exercices sont suivis ?</p>
+
+<div class="cards" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;max-width:900px;margin:0 auto">
+
+  <!-- OPTION A : NOUVEL ONGLET STATS -->
+  <div class="card" data-choice="new-tab" onclick="toggleSelect(this)">
+    <div class="card-body" style="padding-bottom:8px">
+      <h3>A — Onglet Stats dédié</h3>
+      <p>Un 5ᵉ onglet dans la barre de nav. Courbes pour les <strong>6 exercices clés</strong> (Bench, Squat, SDT, Tractions, Militaire, Rowing) + stats générales.</p>
+    </div>
+    <div class="card-image" style="padding:0 12px 12px;display:flex;justify-content:center">
+      <div class="phone">
+        <div class="ph-scroll">
+          <div class="ph-title">Stats</div>
+          <div class="ph-sub">Avril 2026</div>
+          <div class="stat-grid">
+            <div class="stat-card"><div class="stat-val">12</div><div class="stat-label">Séances</div></div>
+            <div class="stat-card"><div class="stat-val">8 420</div><div class="stat-label">kg soulevés</div></div>
+          </div>
+          <div class="chart-box">
+            <div class="chart-title">🏋 Développé couché</div>
+            <svg class="chart-svg" viewBox="0 0 230 70">
+              <polyline points="10,55 57,48 104,42 151,35 198,28" fill="none" stroke="#E8500A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="10" cy="55" r="3.5" fill="#E8500A"/>
+              <circle cx="57" cy="48" r="3.5" fill="#E8500A"/>
+              <circle cx="104" cy="42" r="3.5" fill="#E8500A"/>
+              <circle cx="151" cy="35" r="3.5" fill="#E8500A"/>
+              <circle cx="198" cy="28" r="3.5" fill="#2DBD6E"/>
+              <text x="195" y="22" fill="#2DBD6E" font-size="9" font-weight="bold">🏆 PR</text>
+              <line x1="10" y1="62" x2="220" y2="62" stroke="#2a2a2a" stroke-width="1"/>
+            </svg>
+            <div class="chart-labels"><span>S1</span><span>S2</span><span>S3</span><span>S4</span><span>Moy</span></div>
+          </div>
+          <div class="chart-box">
+            <div class="chart-title">🦵 Squat</div>
+            <svg class="chart-svg" viewBox="0 0 230 70">
+              <polyline points="10,58 57,50 104,43 151,37 198,30" fill="none" stroke="#2A7A2A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="10" cy="58" r="3.5" fill="#2A7A2A"/>
+              <circle cx="57" cy="50" r="3.5" fill="#2A7A2A"/>
+              <circle cx="104" cy="43" r="3.5" fill="#2A7A2A"/>
+              <circle cx="151" cy="37" r="3.5" fill="#2A7A2A"/>
+              <circle cx="198" cy="30" r="3.5" fill="#2DBD6E"/>
+              <line x1="10" y1="62" x2="220" y2="62" stroke="#2a2a2a" stroke-width="1"/>
+            </svg>
+            <div class="chart-labels"><span>S1</span><span>S2</span><span>S3</span><span>S4</span><span>Moy</span></div>
+          </div>
+        </div>
+        <!-- Fake nav with 5 items -->
+        <div style="background:#1a1a1a;border-top:1px solid #2a2a2a;display:flex;padding:4px 0 8px">
+          <div style="flex:1;text-align:center;font-size:9px;color:#888">🏠<br>Accueil</div>
+          <div style="flex:1;text-align:center;font-size:9px;color:#888">💪<br>Séance</div>
+          <div style="flex:1;text-align:center;font-size:9px;color:#888">⏱<br>Timer</div>
+          <div style="flex:1;text-align:center;font-size:9px;color:#888">📊<br>Progrès</div>
+          <div style="flex:1;text-align:center;font-size:9px;color:#E8500A">📈<br>Stats</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPTION B : DANS ONGLET PROGRÈS EXISTANT -->
+  <div class="card" data-choice="in-progress" onclick="toggleSelect(this)">
+    <div class="card-body" style="padding-bottom:8px">
+      <h3>B — Dans l'onglet Progrès</h3>
+      <p>Graphiques intégrés dans l'onglet Progrès existant avec un sous-menu. <strong>Pas de nouvel onglet</strong> — navigation par tabs internes.</p>
+    </div>
+    <div class="card-image" style="padding:0 12px 12px;display:flex;justify-content:center">
+      <div class="phone">
+        <div class="ph-scroll">
+          <div class="ph-title">Progression</div>
+          <div class="ph-sub">Avril 2026</div>
+          <div class="mini-tabs">
+            <div class="mtab">Séances</div>
+            <div class="mtab active">📈 Courbes</div>
+            <div class="mtab">⚖️ Corps</div>
+          </div>
+          <div class="chart-box">
+            <div class="chart-title">🏋 Développé couché</div>
+            <svg class="chart-svg" viewBox="0 0 230 70">
+              <polyline points="10,55 57,48 104,42 151,35 198,28" fill="none" stroke="#E8500A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="10" cy="55" r="3.5" fill="#E8500A"/>
+              <circle cx="57" cy="48" r="3.5" fill="#E8500A"/>
+              <circle cx="104" cy="42" r="3.5" fill="#E8500A"/>
+              <circle cx="151" cy="35" r="3.5" fill="#E8500A"/>
+              <circle cx="198" cy="28" r="3.5" fill="#2DBD6E"/>
+              <text x="195" y="22" fill="#2DBD6E" font-size="9" font-weight="bold">🏆 PR</text>
+              <line x1="10" y1="62" x2="220" y2="62" stroke="#2a2a2a" stroke-width="1"/>
+            </svg>
+            <div class="chart-labels"><span>S1</span><span>S2</span><span>S3</span><span>S4</span></div>
+          </div>
+          <div class="pr-row">
+            <span class="pr-badge">🏆 PR</span>
+            <span class="pr-name">Développé couché</span>
+            <span class="pr-val">105 kg</span>
+          </div>
+          <div class="pr-row">
+            <span class="pr-badge">🏆 PR</span>
+            <span class="pr-name">Squat</span>
+            <span class="pr-val">147.5 kg</span>
+          </div>
+        </div>
+        <div style="background:#1a1a1a;border-top:1px solid #2a2a2a;display:flex;padding:4px 0 8px">
+          <div style="flex:1;text-align:center;font-size:9px;color:#888">🏠</div>
+          <div style="flex:1;text-align:center;font-size:9px;color:#888">💪</div>
+          <div style="flex:1;text-align:center;font-size:9px;color:#888">⏱</div>
+          <div style="flex:1;text-align:center;font-size:9px;color:#E8500A">📊</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPTION C : SUR LA CARTE D'EXERCICE -->
+  <div class="card" data-choice="per-exercise" onclick="toggleSelect(this)">
+    <div class="card-body" style="padding-bottom:8px">
+      <h3>C — Sur la carte exercice</h3>
+      <p>Pas de vue globale. À la place, chaque exercice a son propre mini-graphique accessible depuis la fiche. Tu vois l'historique exactement là où tu t'entraînes.</p>
+    </div>
+    <div class="card-image" style="padding:0 12px 12px;display:flex;justify-content:center">
+      <div class="phone">
+        <div class="ph-scroll">
+          <div style="background:#1E1E1E;border-radius:12px;overflow:hidden;margin-bottom:8px">
+            <div style="padding:10px 12px;border-bottom:1px solid #2a2a2a">
+              <div style="font-size:13px;font-weight:800">Développé couché à la barre</div>
+              <div style="font-size:10px;color:#888;margin-top:1px">5 séries · 4-5 reps · 4-0-1-0</div>
+            </div>
+            <!-- Sets row -->
+            <div style="display:flex;gap:5px;padding:8px 12px">
+              <div style="width:36px;height:36px;border-radius:7px;background:#2DBD6E;color:#fff;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:10px;font-weight:800"><span>1</span><span style="font-size:8px">100</span></div>
+              <div style="width:36px;height:36px;border-radius:7px;background:#E8500A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800">2</div>
+              <div style="width:36px;height:36px;border-radius:7px;background:#2a2a2a;color:#888;display:flex;align-items:center;justify-content:center;font-size:11px">3</div>
+              <div style="width:36px;height:36px;border-radius:7px;background:#2a2a2a;color:#888;display:flex;align-items:center;justify-content:center;font-size:11px">4</div>
+              <div style="width:36px;height:36px;border-radius:7px;background:#2a2a2a;color:#888;display:flex;align-items:center;justify-content:center;font-size:11px">5</div>
+            </div>
+            <!-- Mini chart inside card -->
+            <div style="padding:0 12px 10px">
+              <div style="font-size:9px;color:#555;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px">Historique</div>
+              <svg width="100%" height="40" viewBox="0 0 220 40">
+                <polyline points="10,30 55,26 100,22 145,18 190,14" fill="none" stroke="#E8500A" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="190" cy="14" r="3" fill="#2DBD6E"/>
+                <text x="180" y="10" fill="#2DBD6E" font-size="8" font-weight="bold">PR 105</text>
+              </svg>
+            </div>
+          </div>
+          <div style="font-size:10px;color:#555;text-align:center">Chaque exercice a son propre historique</div>
+        </div>
+        <div style="background:#1a1a1a;border-top:1px solid #2a2a2a;display:flex;padding:4px 0 8px">
+          <div style="flex:1;text-align:center;font-size:9px;color:#888">🏠</div>
+          <div style="flex:1;text-align:center;font-size:9px;color:#888">💪</div>
+          <div style="flex:1;text-align:center;font-size:9px;color:#888">⏱</div>
+          <div style="flex:1;text-align:center;font-size:9px;color:#E8500A">📊</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<p style="margin-top:16px;font-size:13px;opacity:.6;text-align:center">
+  Ma reco : B — garde 4 onglets, tout est organisé dans Progrès avec sous-tabs.<br>
+  Réponds dans le terminal.
+</p>
